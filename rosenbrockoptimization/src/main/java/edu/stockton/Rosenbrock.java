@@ -1,3 +1,4 @@
+package edu.stockton;
 public class Rosenbrock {
 
     /**
