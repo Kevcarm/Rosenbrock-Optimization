@@ -1,11 +1,7 @@
 package edu.stockton;
 
 import org.cicirello.search.problems.OptimizationProblem;
-import org.cicirello.search.representations.RealVector;            // check actual class name
-import org.cicirello.search.sa.SimulatedAnnealing;
-import org.cicirello.search.sa.AnnealingSchedule;
-import org.cicirello.search.operators.reals.RealVectorInitializer;
-import org.cicirello.search.operators.reals.GaussianMutation;
+import org.cicirello.search.representations.RealVector;
 
 public class RosenbrockProblem implements OptimizationProblem<RealVector> {
 
