@@ -10,6 +10,7 @@ import org.cicirello.search.operators.reals.UndoableGaussianMutation;
 import org.cicirello.search.operators.reals.UndoableCauchyMutation;
 import org.cicirello.search.sa.SimulatedAnnealing;
 import org.cicirello.search.sa.ExponentialCooling;
+import org.cicirello.search.evo.OnePlusOneEvolutionaryAlgorithm;
 
 public class Main {
 
@@ -61,6 +62,39 @@ public class Main {
         System.out.println("Best Coordinates: " +
                 Arrays.toString(cResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + cResult.getCostDouble());
+        System.out.println();
+
+
+        //
+        // 1+1 EA
+        //
+        // === Cauchy ===
+        //
+        OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgCauchy =
+                new OnePlusOneEvolutionaryAlgorithm<>(problem, cauchy, initializer);
+
+        SolutionCostPair<RealVector> eaCResult = evoAlgCauchy.optimize(maxEvals);
+        
+        System.out.println("=== 1+1 EA with Cauchy Mutation ===");
+        System.out.println("Best Coordinates: " + 
+            Arrays.toString(eaCResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + eaCResult.getCostDouble());
+        System.out.println();
+
+        //
+        // === Gaussian ===
+        //
+        OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgGaussian =
+                new OnePlusOneEvolutionaryAlgorithm<>(problem, gaussian, initializer);
+
+        SolutionCostPair<RealVector> eaGResult = evoAlgGaussian.optimize(maxEvals);
+
+        System.out.println("=== 1+1 EA with Gaussian Mutation ===");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(eaGResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + eaGResult.getCostDouble());
+        System.out.println();
+                
 
     }
 }
