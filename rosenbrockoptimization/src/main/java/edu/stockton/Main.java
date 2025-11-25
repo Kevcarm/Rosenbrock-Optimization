@@ -26,124 +26,124 @@ public class Main {
         RosenbrockProblem problem = new RosenbrockProblem();
         RealVectorInitializer initializer =
                 new RealVectorInitializer(dimension, lower, upper);
-        ExponentialCooling cooling =
+        ExponentialCooling expCooling =
                 new ExponentialCooling(1000.0, 0.98);
-                LinearCooling linearCooling =
+        LinearCooling linearCooling =
                 new LinearCooling(1000.0, 0.1);          
-                LogarithmicCooling logCooling =
-                LogarithmicCooling logCooling = new LogarithmicCooling(1000.0);
-
-
-
+        LogarithmicCooling logCooling =
+                new LogarithmicCooling(1000.0);
 
         //
-        // === Gaussian Mutation Test ===
+        // Simulated Annealing
         //
+        System.out.println("=== Simulated Annealing Results ===\n");
+
+        // === Gaussian Mutation Test + Exponential Cooling ===
         UndoableGaussianMutation<RealVector> gaussian =
                 UndoableGaussianMutation.createGaussianMutation(0.1);
 
         SimulatedAnnealing<RealVector> saGaussian =
-                new SimulatedAnnealing<>(problem, gaussian, initializer, cooling);
+                new SimulatedAnnealing<>(problem, gaussian, initializer, expCooling);
 
         SolutionCostPair<RealVector> gResult =
                 saGaussian.optimize(maxEvals);
 
-        System.out.println("=== Gaussian Mutation ===");
+        System.out.println("Gaussian + Exponential Cooling");
         System.out.println("Best Coordinates: " +
                 Arrays.toString(gResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + gResult.getCostDouble());
         System.out.println();
 
-        //  Gaussian + Linear Cooling 
+        // === Gaussian Mutation Test + Linear Cooling ===
         SimulatedAnnealing<RealVector> saGaussianLinear =
-        new SimulatedAnnealing<>(problem, gaussian, initializer, linearCooling);
+                new SimulatedAnnealing<>(problem, gaussian, initializer, linearCooling);
 
         SolutionCostPair<RealVector> gLinResult = saGaussianLinear.optimize(maxEvals);
 
-        System.out.println("=== Gaussian + Linear Cooling ===");
+        System.out.println("Gaussian + Linear Cooling");
         System.out.println("Best Coordinates: " +
             Arrays.toString(gLinResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + gLinResult.getCostDouble());
         System.out.println();
 
-        // Gaussian + Logarithmic Cooling 
+        // === Gaussian Mutation Test + Logarithmic Cooling ===
         SimulatedAnnealing<RealVector> saGaussianLog =
-        new SimulatedAnnealing<>(problem, gaussian, initializer, logCooling);
+                new SimulatedAnnealing<>(problem, gaussian, initializer, logCooling);
         SolutionCostPair<RealVector> gLogResult = saGaussianLog.optimize(maxEvals);
 
-        System.out.println("=== Gaussian + Logarithmic Cooling ===");
+        System.out.println("Gaussian + Logarithmic Cooling");
         System.out.println("Best Coordinates: " +
             Arrays.toString(gLogResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + gLogResult.getCostDouble());
         System.out.println();
-        //
-        // === Cauchy Mutation Test ===
-        //
+
+        // === Cauchy Mutation Test + Exponential Cooling ===
         UndoableCauchyMutation<RealVector> cauchy =
                 UndoableCauchyMutation.createCauchyMutation(0.1);
 
         SimulatedAnnealing<RealVector> saCauchy =
-                new SimulatedAnnealing<>(problem, cauchy, initializer, cooling);
+                new SimulatedAnnealing<>(problem, cauchy, initializer, expCooling);
 
         SolutionCostPair<RealVector> cResult =
                 saCauchy.optimize(maxEvals);
 
-        System.out.println("=== Cauchy Mutation ===");
+        System.out.println("Cauchy + Exponential Cooling");
         System.out.println("Best Coordinates: " +
                 Arrays.toString(cResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + cResult.getCostDouble());
         System.out.println();
-        // Cauchy + Linear Cooling
+
+        // === Cauchy Mutation Test + Linear Cooling ===
         SimulatedAnnealing<RealVector> saCauchyLinear =
-        new SimulatedAnnealing<>(problem, cauchy, initializer, linearCooling);
+                new SimulatedAnnealing<>(problem, cauchy, initializer, linearCooling);
 
         SolutionCostPair<RealVector> cLinResult = saCauchyLinear.optimize(maxEvals);
 
-        System.out.println("=== Cauchy + Linear Cooling ===");
+        System.out.println("Cauchy + Linear Cooling");
         System.out.println("Best Coordinates: " +
             Arrays.toString(cLinResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + cLinResult.getCostDouble());
         System.out.println();
 
-// === Cauchy + Logarithmic Cooling ===
-SimulatedAnnealing<RealVector> saCauchyLog =
-    new SimulatedAnnealing<>(problem, cauchy, initializer, logCooling);
+        // === Cauchy Mutation Test + Logarithmic Cooling ===
+        SimulatedAnnealing<RealVector> saCauchyLog =
+                new SimulatedAnnealing<>(problem, cauchy, initializer, logCooling);
 
-SolutionCostPair<RealVector> cLogResult = saCauchyLog.optimize(maxEvals);
+        SolutionCostPair<RealVector> cLogResult = saCauchyLog.optimize(maxEvals);
 
-System.out.println("=== Cauchy + Logarithmic Cooling ===");
-System.out.println("Best Coordinates: " +
-    Arrays.toString(cLogResult.getSolution().toArray(null)));
-System.out.println("Best Minimum: " + cLogResult.getCostDouble());
-System.out.println();
+        System.out.println("Cauchy + Logarithmic Cooling");
+        System.out.println("Best Coordinates: " +
+        Arrays.toString(cLogResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + cLogResult.getCostDouble());
+        System.out.println();
 
 
 
         //
         // 1+1 EA
         //
-        // === Cauchy ===
-        //
+        System.out.println("=== 1+1 Evolutionary Algorithm Results ===");
+        // === Cauchy Mutation Test ===
         OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgCauchy =
                 new OnePlusOneEvolutionaryAlgorithm<>(problem, cauchy, initializer);
 
         SolutionCostPair<RealVector> eaCResult = evoAlgCauchy.optimize(maxEvals);
         
-        System.out.println("=== 1+1 EA with Cauchy Mutation ===");
+        System.out.println("Cauchy");
         System.out.println("Best Coordinates: " + 
             Arrays.toString(eaCResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + eaCResult.getCostDouble());
         System.out.println();
 
         //
-        // === Gaussian ===
+        // === Gaussian Mutation Test===
         //
         OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgGaussian =
                 new OnePlusOneEvolutionaryAlgorithm<>(problem, gaussian, initializer);
 
         SolutionCostPair<RealVector> eaGResult = evoAlgGaussian.optimize(maxEvals);
 
-        System.out.println("=== 1+1 EA with Gaussian Mutation ===");
+        System.out.println("Gaussian");
         System.out.println("Best Coordinates: " +
             Arrays.toString(eaGResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + eaGResult.getCostDouble());
