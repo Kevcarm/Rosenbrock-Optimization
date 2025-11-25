@@ -10,6 +10,8 @@ import org.cicirello.search.operators.reals.UndoableGaussianMutation;
 import org.cicirello.search.operators.reals.UndoableCauchyMutation;
 import org.cicirello.search.sa.SimulatedAnnealing;
 import org.cicirello.search.sa.ExponentialCooling;
+import org.cicirello.search.sa.LinearCooling;
+import org.cicirello.search.sa.LogarithmicCooling;
 import org.cicirello.search.evo.OnePlusOneEvolutionaryAlgorithm;
 
 public class Main {
@@ -26,6 +28,13 @@ public class Main {
                 new RealVectorInitializer(dimension, lower, upper);
         ExponentialCooling cooling =
                 new ExponentialCooling(1000.0, 0.98);
+                LinearCooling linearCooling =
+                new LinearCooling(1000.0, 0.1);          
+                LogarithmicCooling logCooling =
+                LogarithmicCooling logCooling = new LogarithmicCooling(1000.0);
+
+
+
 
         //
         // === Gaussian Mutation Test ===
@@ -45,7 +54,28 @@ public class Main {
         System.out.println("Best Minimum: " + gResult.getCostDouble());
         System.out.println();
 
+        //  Gaussian + Linear Cooling 
+        SimulatedAnnealing<RealVector> saGaussianLinear =
+        new SimulatedAnnealing<>(problem, gaussian, initializer, linearCooling);
 
+        SolutionCostPair<RealVector> gLinResult = saGaussianLinear.optimize(maxEvals);
+
+        System.out.println("=== Gaussian + Linear Cooling ===");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(gLinResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + gLinResult.getCostDouble());
+        System.out.println();
+
+        // Gaussian + Logarithmic Cooling 
+        SimulatedAnnealing<RealVector> saGaussianLog =
+        new SimulatedAnnealing<>(problem, gaussian, initializer, logCooling);
+        SolutionCostPair<RealVector> gLogResult = saGaussianLog.optimize(maxEvals);
+
+        System.out.println("=== Gaussian + Logarithmic Cooling ===");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(gLogResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + gLogResult.getCostDouble());
+        System.out.println();
         //
         // === Cauchy Mutation Test ===
         //
@@ -63,6 +93,30 @@ public class Main {
                 Arrays.toString(cResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + cResult.getCostDouble());
         System.out.println();
+        // Cauchy + Linear Cooling
+        SimulatedAnnealing<RealVector> saCauchyLinear =
+        new SimulatedAnnealing<>(problem, cauchy, initializer, linearCooling);
+
+        SolutionCostPair<RealVector> cLinResult = saCauchyLinear.optimize(maxEvals);
+
+        System.out.println("=== Cauchy + Linear Cooling ===");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(cLinResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + cLinResult.getCostDouble());
+        System.out.println();
+
+// === Cauchy + Logarithmic Cooling ===
+SimulatedAnnealing<RealVector> saCauchyLog =
+    new SimulatedAnnealing<>(problem, cauchy, initializer, logCooling);
+
+SolutionCostPair<RealVector> cLogResult = saCauchyLog.optimize(maxEvals);
+
+System.out.println("=== Cauchy + Logarithmic Cooling ===");
+System.out.println("Best Coordinates: " +
+    Arrays.toString(cLogResult.getSolution().toArray(null)));
+System.out.println("Best Minimum: " + cLogResult.getCostDouble());
+System.out.println();
+
 
 
         //
