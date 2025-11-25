@@ -8,6 +8,7 @@ import org.cicirello.search.representations.RealVector;
 import org.cicirello.search.operators.reals.RealVectorInitializer;
 import org.cicirello.search.operators.reals.UndoableGaussianMutation;
 import org.cicirello.search.operators.reals.UndoableCauchyMutation;
+import org.cicirello.search.operators.reals.UndoableUniformMutation;
 import org.cicirello.search.sa.SimulatedAnnealing;
 import org.cicirello.search.sa.ExponentialCooling;
 import org.cicirello.search.sa.LinearCooling;
@@ -117,7 +118,45 @@ public class Main {
         System.out.println("Best Minimum: " + cLogResult.getCostDouble());
         System.out.println();
 
+        // === Uniform Mutation Test + Exponential Cooling ===
+        UndoableUniformMutation<RealVector> uniform =
+                UndoableUniformMutation.createUniformMutation(0.1);
 
+        SimulatedAnnealing<RealVector> saUniform =
+                new SimulatedAnnealing<>(problem, uniform, initializer, expCooling);
+                
+        SolutionCostPair<RealVector> uResult =
+                saUniform.optimize(maxEvals);
+
+        System.out.println("Uniform + Exponential Cooling");
+        System.out.println("Best Coordinates: " +
+                Arrays.toString(uResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + uResult.getCostDouble());
+        System.out.println();
+
+        // === Uniform Mutation Test + Linear Cooling ===
+        SimulatedAnnealing<RealVector> saUniformLinear =
+                new SimulatedAnnealing<>(problem, uniform, initializer, linearCooling);
+
+        SolutionCostPair<RealVector> uLinResult = saUniformLinear.optimize(maxEvals);
+
+        System.out.println("Uniform + Linear Cooling");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(uLinResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + uLinResult.getCostDouble());
+        System.out.println();
+
+        // === Uniform Mutation Test + Logarithmic Cooling ===
+        SimulatedAnnealing<RealVector> saUniformLog =
+                new SimulatedAnnealing<>(problem, uniform, initializer, logCooling);
+
+        SolutionCostPair<RealVector> uLogResult = saUniformLog.optimize(maxEvals);
+
+        System.out.println("Uniform + Logarithmic Cooling");
+        System.out.println("Best Coordinates: " +
+        Arrays.toString(uLogResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + uLogResult.getCostDouble());
+        System.out.println();
 
         //
         // 1+1 EA
@@ -147,6 +186,20 @@ public class Main {
         System.out.println("Best Coordinates: " +
             Arrays.toString(eaGResult.getSolution().toArray(null)));
         System.out.println("Best Minimum: " + eaGResult.getCostDouble());
+        System.out.println();
+
+        //
+        // === Uniform Mutation Test ===
+        //
+        OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgUniform =
+                new OnePlusOneEvolutionaryAlgorithm<>(problem, uniform, initializer);
+        
+        SolutionCostPair<RealVector> eaUResult = evoAlgUniform.optimize(maxEvals);
+
+        System.out.println("Uniform");
+        System.out.println("Best Coordinates: " +
+                Arrays.toString(eaUResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + eaUResult.getCostDouble());
         System.out.println();
                 
 
