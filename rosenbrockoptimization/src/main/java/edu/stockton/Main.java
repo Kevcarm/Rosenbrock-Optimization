@@ -162,6 +162,19 @@ public class Main {
         // 1+1 EA
         //
         System.out.println("=== 1+1 Evolutionary Algorithm Results ===");
+
+        // === Gaussian Mutation Test===
+        OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgGaussian =
+                new OnePlusOneEvolutionaryAlgorithm<>(problem, gaussian, initializer);
+
+        SolutionCostPair<RealVector> eaGResult = evoAlgGaussian.optimize(maxEvals);
+
+        System.out.println("Gaussian");
+        System.out.println("Best Coordinates: " +
+            Arrays.toString(eaGResult.getSolution().toArray(null)));
+        System.out.println("Best Minimum: " + eaGResult.getCostDouble());
+        System.out.println();
+
         // === Cauchy Mutation Test ===
         OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgCauchy =
                 new OnePlusOneEvolutionaryAlgorithm<>(problem, cauchy, initializer);
@@ -174,23 +187,7 @@ public class Main {
         System.out.println("Best Minimum: " + eaCResult.getCostDouble());
         System.out.println();
 
-        //
-        // === Gaussian Mutation Test===
-        //
-        OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgGaussian =
-                new OnePlusOneEvolutionaryAlgorithm<>(problem, gaussian, initializer);
-
-        SolutionCostPair<RealVector> eaGResult = evoAlgGaussian.optimize(maxEvals);
-
-        System.out.println("Gaussian");
-        System.out.println("Best Coordinates: " +
-            Arrays.toString(eaGResult.getSolution().toArray(null)));
-        System.out.println("Best Minimum: " + eaGResult.getCostDouble());
-        System.out.println();
-
-        //
         // === Uniform Mutation Test ===
-        //
         OnePlusOneEvolutionaryAlgorithm<RealVector> evoAlgUniform =
                 new OnePlusOneEvolutionaryAlgorithm<>(problem, uniform, initializer);
         
