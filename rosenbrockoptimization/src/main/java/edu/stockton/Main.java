@@ -11,6 +11,9 @@ import org.cicirello.search.sa.ExponentialCooling;
 import org.cicirello.search.sa.LinearCooling;
 import org.cicirello.search.sa.LogarithmicCooling;
 import org.cicirello.search.sa.SimulatedAnnealing;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -26,7 +29,6 @@ public class Main {
             "SA Uniform + Exp",
             "SA Uniform + Linear",
             "SA Uniform + Log",
-
             // 1+1 EA (3)
             "EA Gaussian",
             "EA Cauchy",
@@ -38,6 +40,9 @@ public class Main {
         final double lower = -5.0;
         final double upper = 5.0;
         final int maxEvals = 100000;
+        final long nanoConv = 1_000_000_000;
+
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
 
         for (int d = 2; d < 11; d++) {
             RosenbrockProblem problem = new RosenbrockProblem();
