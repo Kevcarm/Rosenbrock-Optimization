@@ -11,8 +11,19 @@ import org.cicirello.search.sa.ExponentialCooling;
 import org.cicirello.search.sa.LinearCooling;
 import org.cicirello.search.sa.LogarithmicCooling;
 import org.cicirello.search.sa.SimulatedAnnealing;
+
+import com.opencsv.CSVWriterBuilder;
+import com.opencsv.ICSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class Main {
@@ -227,6 +238,10 @@ public class Main {
 
         printUnifiedTable(variants, resultTable, "Optimization Results (Cost Values)");
         printUnifiedTable(variants, timeTable, "Optimization Time (Seconds)");
+        toCSV(variants, resultTable, "Optimization Results (Cost Values)");
+        toCSV(variants, timeTable, "Optimization Time (Seconds)");
+        
+        
     }
 
     private static void printUnifiedTable(String[] rows, double[][] table, String title) {
@@ -274,6 +289,64 @@ public class Main {
 
             System.out.println();
         }
+    }
+
+    private static void toCSV(String[] rows, double[][] table, String title) {
+        // Anchor output next to the compiled classes/jar, regardless of current working directory
+        Path targetDir;
+        try {
+            Path codeLocation = Paths.get(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            Path parent = codeLocation.getParent(); // target/ for jar, target/classes for IDE
+            if (parent == null) {
+                throw new IllegalStateException("Cannot resolve target directory from: " + codeLocation);
+            }
+            // If codeLocation is target/classes, parent is target; if jar, parent is already target
+            if (parent.getFileName() != null && parent.getFileName().toString().equals("classes")) {
+                targetDir = parent.getParent();
+                if (targetDir == null) {
+                    throw new IllegalStateException("Cannot resolve target directory above classes: " + parent);
+                }
+            } else {
+                targetDir = parent;
+            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Unable to resolve output directory for CSV files", e);
+        }
+
+        File outputDir = targetDir.resolve("output").toFile();
+        if (!outputDir.exists() && !outputDir.mkdirs()) {
+            throw new IllegalStateException("Unable to create output directory " + outputDir.getAbsolutePath());
+        }
+
+        String safeTitle = title.replaceAll("\\s+", "_").toLowerCase();
+        File outputFile = new File(outputDir, safeTitle + ".csv");
+
+        String[] header = new String[10];
+        header[0] = "Variant";
+        for (int d = 2; d <= 10; d++) {
+            header[d - 1] = "Dim" + d;
+        }
+
+        try (Writer writer = new FileWriter(outputFile);
+             ICSVWriter csvWriter = new CSVWriterBuilder(writer).build()) {
+
+                    csvWriter.writeNext(new String[] { title });
+                    csvWriter.writeNext(header);
+
+                    for (int r = 0; r < rows.length; r++) {
+                        String[] line = new String[10];
+                        line[0] = rows[r];
+                        for (int c = 0; c < 9; c++) {
+                            line[c + 1] = Double.toString(table[r][c]);
+                        }
+                        csvWriter.writeNext(line);
+                    }
+            } catch (IOException e) {
+            throw new RuntimeException("Failed to write CSV to " + outputFile.getAbsolutePath(), e);
+                }
+
+
+
     }
 
 }
