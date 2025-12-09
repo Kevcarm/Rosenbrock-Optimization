@@ -36,6 +36,7 @@ public class Main {
         };
 
         double[][] resultTable = new double[variants.length][11];
+        double[][] timeTable = new double[variants.length][11];
 
         final double lower = -5.0;
         final double upper = 5.0;
@@ -43,6 +44,7 @@ public class Main {
         final long nanoConv = 1_000_000_000;
 
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        long startTime, endTime;
 
         for (int d = 2; d < 11; d++) {
             RosenbrockProblem problem = new RosenbrockProblem();
@@ -60,6 +62,8 @@ public class Main {
             //
 
             // === Gaussian Mutation Test + Exponential Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             UndoableGaussianMutation < RealVector > gaussian =
                 UndoableGaussianMutation.createGaussianMutation(0.1);
 
@@ -69,18 +73,33 @@ public class Main {
             SolutionCostPair < RealVector > gResult =
                 saGaussian.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[0][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Gaussian Mutation Test + Linear Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+            
             SimulatedAnnealing < RealVector > saGaussianLinear =
                 new SimulatedAnnealing < > (problem, gaussian, initializer, linearCooling);
 
             SolutionCostPair < RealVector > gLinResult = saGaussianLinear.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[1][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Gaussian Mutation Test + Logarithmic Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             SimulatedAnnealing < RealVector > saGaussianLog =
                 new SimulatedAnnealing < > (problem, gaussian, initializer, logCooling);
             SolutionCostPair < RealVector > gLogResult = saGaussianLog.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[2][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Cauchy Mutation Test + Exponential Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             UndoableCauchyMutation < RealVector > cauchy =
                 UndoableCauchyMutation.createCauchyMutation(0.1);
 
@@ -90,19 +109,34 @@ public class Main {
             SolutionCostPair < RealVector > cResult =
                 saCauchy.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[3][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Cauchy Mutation Test + Linear Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             SimulatedAnnealing < RealVector > saCauchyLinear =
                 new SimulatedAnnealing < > (problem, cauchy, initializer, linearCooling);
 
             SolutionCostPair < RealVector > cLinResult = saCauchyLinear.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[4][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Cauchy Mutation Test + Logarithmic Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             SimulatedAnnealing < RealVector > saCauchyLog =
                 new SimulatedAnnealing < > (problem, cauchy, initializer, logCooling);
 
             SolutionCostPair < RealVector > cLogResult = saCauchyLog.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[5][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Uniform Mutation Test + Exponential Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             UndoableUniformMutation < RealVector > uniform =
                 UndoableUniformMutation.createUniformMutation(0.1);
 
@@ -112,39 +146,65 @@ public class Main {
             SolutionCostPair < RealVector > uResult =
                 saUniform.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[6][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Uniform Mutation Test + Linear Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
             SimulatedAnnealing < RealVector > saUniformLinear =
                 new SimulatedAnnealing < > (problem, uniform, initializer, linearCooling);
 
             SolutionCostPair < RealVector > uLinResult = saUniformLinear.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[7][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Uniform Mutation Test + Logarithmic Cooling ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             SimulatedAnnealing < RealVector > saUniformLog =
                 new SimulatedAnnealing < > (problem, uniform, initializer, logCooling);
 
             SolutionCostPair < RealVector > uLogResult = saUniformLog.optimize(maxEvals);
+
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[8][d-2] = (endTime - startTime) / (double) nanoConv;
 
             //
             // 1+1 EA
             //
 
             // === Gaussian Mutation Test===
+            startTime = bean.getCurrentThreadCpuTime();
             OnePlusOneEvolutionaryAlgorithm < RealVector > evoAlgGaussian =
                 new OnePlusOneEvolutionaryAlgorithm < > (problem, gaussian, initializer);
 
             SolutionCostPair < RealVector > eaGResult = evoAlgGaussian.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[9][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Cauchy Mutation Test ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             OnePlusOneEvolutionaryAlgorithm < RealVector > evoAlgCauchy =
                 new OnePlusOneEvolutionaryAlgorithm < > (problem, cauchy, initializer);
 
             SolutionCostPair < RealVector > eaCResult = evoAlgCauchy.optimize(maxEvals);
 
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[10][d-2] = (endTime - startTime) / (double) nanoConv;
+
             // === Uniform Mutation Test ===
+            startTime = bean.getCurrentThreadCpuTime();
+
             OnePlusOneEvolutionaryAlgorithm < RealVector > evoAlgUniform =
                 new OnePlusOneEvolutionaryAlgorithm < > (problem, uniform, initializer);
 
             SolutionCostPair < RealVector > eaUResult = evoAlgUniform.optimize(maxEvals);
+
+            endTime = bean.getCurrentThreadCpuTime();
+            timeTable[11][d-2] = (endTime - startTime) / (double) nanoConv;
 
             // === SA rows ===
             resultTable[0][d-2] = gResult.getCostDouble();
@@ -165,16 +225,17 @@ public class Main {
             resultTable[11][d-2] = eaUResult.getCostDouble();
         }
 
-        printUnifiedTable(variants, resultTable);
+        printUnifiedTable(variants, resultTable, "Optimization Results (Cost Values)");
+        printUnifiedTable(variants, timeTable, "Optimization Time (Seconds)");
     }
 
-    private static void printUnifiedTable(String[] rows, double[][] table) {
+    private static void printUnifiedTable(String[] rows, double[][] table, String title) {
 
         final int nameWidth = 30; // variant name column
         final int colWidth = 14; // each numeric column
 
         // Title
-        System.out.println("==================== OPTIMIZATION RESULTS TABLE ====================");
+        System.out.println("==================== " + title + " ====================");
 
         // Header
         System.out.printf("%-" + nameWidth + "s", "Variant");
