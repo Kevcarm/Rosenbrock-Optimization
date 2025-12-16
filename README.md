@@ -15,15 +15,20 @@ You can verify:
 java --version
 mvn --version
 
-When the program runs, it prints results to the console and writes CSV output files to:
-target/output/
+### Running the Program
 
-Expected CSV files:
+The program is executed from **Main.java**
+run Main.java
+
+When Main.java runs, it prints results to the console and writes CSV output files to:
+target/output/
+The generated files include:
+
 optimization_results_(cost_values).csv
 
 optimization_time_(seconds).csv
 
-## Project Structure
-src/main/java/edu/stockton/Main.java — entry point (runs experiments)
-src/main/java/edu/stockton/RosenbrockProblem.java — Rosenbrock optimization problem definition
-src/main/java/edu/stockton/Rosenbrock.java — Rosenbrock function implementation
+### Project Structure
+Main.java – entry point that runs all optimization experiments
+RosenbrockProblem.java – defines the Rosenbrock optimization problem
+Rosenbrock.java – implements the Rosenbrock function
