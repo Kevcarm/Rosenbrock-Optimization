@@ -22,6 +22,13 @@ mvn --version
 The program is executed from **Main.java**
 run Main.java
 
+or 
+
+In the terminal, make sure you're in the project root (rosenbrockoptimization) then run the command
+``` bash
+mvn -q -Dexec.mainClass=edu.stockton.Main -Dexec.classpathScope=runtime org.codehaus.mojo:exec-maven-plugin:3.1.0:java
+```
+
 When Main.java runs, it prints results to the console and writes CSV output files to:
 target/output/
 The generated files include:
